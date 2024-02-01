@@ -4,6 +4,7 @@ import com.project.schoolmanagment.payload.messages.SuccessMessages;
 import com.project.schoolmanagment.payload.request.authentication.LoginRequest;
 import com.project.schoolmanagment.payload.request.authentication.UpdatePasswordRequest;
 import com.project.schoolmanagment.payload.response.authentication.AuthResponse;
+import com.project.schoolmanagment.payload.response.user.UserResponse;
 import com.project.schoolmanagment.service.user.AuthenticationService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,12 @@ public class AuthenticationController {
 
     return ResponseEntity.ok(SuccessMessages.PASSWORD_CHANGED_RESPONSE_MESSAGE);
 
+  }
+
+  @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean','Teacher')")
+  @GetMapping("/user")
+  public ResponseEntity<UserResponse> findByUsername(HttpServletRequest httpServletRequest){
+    return ResponseEntity.ok(authenticationService.findByUsername(httpServletRequest));
   }
 
 }
