@@ -1,7 +1,11 @@
 package com.project.schoolmanagment.service.user;
 
+import com.project.schoolmanagment.entity.concretes.user.User;
+import com.project.schoolmanagment.exception.BadRequestException;
 import com.project.schoolmanagment.payload.mappers.UserMapper;
+import com.project.schoolmanagment.payload.messages.ErrorMessages;
 import com.project.schoolmanagment.payload.request.authentication.LoginRequest;
+import com.project.schoolmanagment.payload.request.authentication.UpdatePasswordRequest;
 import com.project.schoolmanagment.payload.response.authentication.AuthResponse;
 import com.project.schoolmanagment.repository.user.UserRepository;
 import com.project.schoolmanagment.security.jwt.JwtUtils;
@@ -16,6 +20,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +47,7 @@ public class AuthenticationService {
     SecurityContextHolder.getContext().setAuthentication(authentication);
     
     //create new JWT for user
-    String token = "Bearer " + jwtUtils.generateJwtToken(authentication);
+    String token = jwtUtils.generateJwtToken(authentication);
 
     //get all info for user
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -65,5 +71,25 @@ public class AuthenticationService {
     
     return responseBuilder.build();    
     
+  }
+
+  public void updatePassword(UpdatePasswordRequest request, HttpServletRequest httpServletRequest) {
+
+    String username = (String) httpServletRequest.getAttribute("username");
+
+    User user =userRepository.findByUsername(username);
+
+    //validate if user is not built-in
+    if (user.getBuiltIn()){
+      throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+    }
+    // this method checks without decoding
+    if (passwordEncoder.matches(request.getNewPassword(), request.getOldPassword())){
+        throw new BadRequestException(ErrorMessages.PASSWORD_SHOULD_NOT_MATCHED);
+    }
+
+    user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+    userRepository.save(user);
+
   }
 }
