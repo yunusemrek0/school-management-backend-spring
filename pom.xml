@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.project</groupId>
-    <artifactId>school-managment-b199</artifactId>
+    <artifactId>school-managment-backend-spring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>school-management</name>
     <description>school-management</description>
