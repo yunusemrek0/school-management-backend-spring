@@ -34,14 +34,14 @@ public class LessonController {
     }
 
     @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean')")
-    @GetMapping("/getLessonByName}")
+    @GetMapping("/getLessonByName")
     public ResponseMessage<LessonResponse> getLessonByName(@RequestParam String lessonName){
         return lessonService.getLessonByName(lessonName);
     }
 
 
     @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean')")
-    @GetMapping("/getLessonByPage}")
+    @GetMapping("/getLessonByPage")
     public Page<LessonResponse> getLessonByPage(
             @RequestParam(value = "page",defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "10") int size,
@@ -52,7 +52,7 @@ public class LessonController {
     }
 
     @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean')")
-    @GetMapping("/getLessonAllByIdSet}")
+    @GetMapping("/getLessonAllByIdSet")
     public Set<Lesson> getAllLessonByIdSet(@RequestParam(name = "lessonId") Set<Long> idSet){
 
         return lessonService.getLessonByIdSet(idSet);

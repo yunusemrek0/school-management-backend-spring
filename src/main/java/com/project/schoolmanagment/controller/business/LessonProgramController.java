@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LessonProgramController {
 
-    private LessonProgramService lessonProgramService;
+    private final LessonProgramService lessonProgramService;
 
 
     @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean')")

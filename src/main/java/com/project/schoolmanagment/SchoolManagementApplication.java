@@ -63,7 +63,7 @@ public class SchoolManagementApplication implements CommandLineRunner {
             UserRequest userRequest = getUserRequest();
             userService.saveUser(userRequest,"Admin");
         }
-        
+
     }
 
     private static UserRequest getUserRequest() {

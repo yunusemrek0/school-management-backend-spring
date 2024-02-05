@@ -80,7 +80,7 @@ public class LessonService {
         }else {
             return ResponseMessage.<LessonResponse> builder()
                     .message(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE,lessonName))
-                    .object(null)
+                    .httpStatus(HttpStatus.NOT_FOUND)
                     .build();
         }
     }
@@ -110,8 +110,9 @@ public class LessonService {
         }
 
         Lesson updatedLesson = lessonMapper.mapLessonRequestToLesson(lessonRequest);
-        updatedLesson.setLessonPrograms(lesson.getLessonPrograms());
         updatedLesson.setId(lessonId);
+        updatedLesson.setLessonPrograms(lesson.getLessonPrograms());
+
 
         Lesson savedLesson = lessonRepository.save(updatedLesson);
 
