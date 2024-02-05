@@ -31,7 +31,7 @@ public class EducationTermController {
     @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean','Teacher')")
     @GetMapping("/getAll")
     public List<EducationTermResponse> getAllEducationTerms(){
-        return null;
+        return educationTermService.getAllEducationTerms();
     }
 
     @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean','Teacher')")
