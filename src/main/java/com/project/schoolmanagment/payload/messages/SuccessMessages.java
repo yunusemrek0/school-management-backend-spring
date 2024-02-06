@@ -14,6 +14,17 @@ public class SuccessMessages {
   public static final String USER_UPDATE_MESSAGE = "User is Updated Successfully";
   public static final String PASSWORD_CHANGED_RESPONSE_MESSAGE = "Password Successfully Changed" ;
 
+  //Student
+  public static final String STUDENT_SAVE = "Student is Saved";
+  public static final String STUDENT_UPDATE = "Student is Updated Successfully";
+
+  //Teacher
+  public static final String TEACHER_SAVE = "Teacher is Saved";
+  public static final String TEACHER_UPDATE = "Teacher is Updated Successfully";
+
+  //Advisor teacher
+  public static final String ADVISOR_TEACHER_SAVE = "Advisor Teacher is Saved";
+
 
   //Education term
   public static final String EDUCATION_TERM_SAVE = "Education Term is Saved";
