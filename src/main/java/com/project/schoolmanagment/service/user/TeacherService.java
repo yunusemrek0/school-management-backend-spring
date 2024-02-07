@@ -8,7 +8,6 @@ import com.project.schoolmanagment.payload.mappers.UserMapper;
 import com.project.schoolmanagment.payload.messages.SuccessMessages;
 import com.project.schoolmanagment.payload.request.user.TeacherRequest;
 import com.project.schoolmanagment.payload.response.businnes.ResponseMessage;
-import com.project.schoolmanagment.payload.response.user.TeacherResponse;
 import com.project.schoolmanagment.payload.response.user.UserResponse;
 import com.project.schoolmanagment.repository.user.UserRepository;
 import com.project.schoolmanagment.service.business.LessonProgramService;
@@ -21,7 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +74,61 @@ public class TeacherService {
                 .httpStatus(HttpStatus.CREATED)
                 .returnBody(userMapper.mapUserToUserResponse(savedTeacher))
                 .build();
+    }
+
+    public ResponseMessage<UserResponse> changeAdvisorTeacherStatus(Long id) {
+
+        User teacher = methodHelper.isUserExist(id);
+        methodHelper.checkRole(teacher,RoleType.TEACHER);
+        methodHelper.checkIsAdvisor(teacher);
+
+        teacher.setIsAdvisor(false);
+        userRepository.save(teacher);
+
+        List<User> allStudents = userRepository.findByAdvisorTeacherId(id);
+
+        if (!allStudents.isEmpty()){
+            allStudents.forEach(students -> students.setAdvisorTeacherId(null));
+        }
+
+        return ResponseMessage.<UserResponse> builder()
+                .message(SuccessMessages.ADVISOR_TEACHER_DELETE)
+                .returnBody(userMapper.mapUserToUserResponse(teacher))
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+    }
+
+    public List<UserResponse> getAllAdvisorTeacher() {
+
+        return userRepository
+                .findAll()
+                .stream()
+                .filter(teacher -> teacher.getIsAdvisor().equals(true))
+                .map(userMapper::mapUserToUserResponse)
+                .collect(Collectors.toList());
+
+        // check there null point ex for id 35 user user.getUserRole()
+    }
+
+    public ResponseMessage<UserResponse> updateTeacherByManagers(TeacherRequest teacherRequest, Long id) {
+
+        User teacher = methodHelper.isUserExist(id);
+        methodHelper.checkRole(teacher,RoleType.TEACHER);
+
+        Set<LessonProgram> lessonPrograms =  lessonProgramService.getLessonProgramById(teacherRequest.getLessonProgramIdList());
+        User teacherToUpdate = userMapper.mapUserRequestToUser(teacherRequest);
+        teacherToUpdate.setId(teacher.getId());
+        teacherToUpdate.setLessonProgramList(lessonPrograms);
+        teacherToUpdate.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
+
+        User updatedTeacher = userRepository.save(teacherToUpdate);
+
+        return ResponseMessage.<UserResponse>builder()
+                .message(SuccessMessages.TEACHER_UPDATE)
+                .returnBody(userMapper.mapUserToUserResponse(updatedTeacher))
+                .httpStatus(HttpStatus.OK)
+                .build();
+
     }
 }
