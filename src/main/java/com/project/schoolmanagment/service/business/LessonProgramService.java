@@ -7,7 +7,6 @@ import com.project.schoolmanagment.entity.concretes.user.User;
 import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.exception.BadRequestException;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
-import com.project.schoolmanagment.payload.mappers.LessonMapper;
 import com.project.schoolmanagment.payload.mappers.LessonProgramMapper;
 import com.project.schoolmanagment.payload.messages.ErrorMessages;
 import com.project.schoolmanagment.payload.messages.SuccessMessages;
@@ -24,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.naming.ldap.PagedResultsControl;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
@@ -139,7 +137,7 @@ public class LessonProgramService {
         return lessonPrograms;
     }
 
-    public Set<LessonProgramResponse> getAllLessonProgramsByTeacherUsername(HttpServletRequest httpServletRequest) {
+    public Set<LessonProgramResponse> getAllLessonProgramsByUsername(HttpServletRequest httpServletRequest) {
 
         String username = (String) httpServletRequest.getAttribute("username");
 
@@ -165,5 +163,18 @@ public class LessonProgramService {
 
 
 
+    }
+
+    public Set<LessonProgramResponse> getAllLessonProgramsByStudentId(Long id) {
+
+        User student = methodHelper.isUserExist(id);
+        //check if user is a teacher
+        methodHelper.checkRole(student, RoleType.STUDENT);
+
+        return lessonProgramRepository
+                .findByUsers_IdEquals(id)
+                .stream()
+                .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse)
+                .collect(Collectors.toSet());
     }
 }

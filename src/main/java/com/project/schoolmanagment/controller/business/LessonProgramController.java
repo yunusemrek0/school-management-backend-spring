@@ -3,7 +3,6 @@ package com.project.schoolmanagment.controller.business;
 
 import com.project.schoolmanagment.payload.request.business.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.businnes.LessonProgramResponse;
-import com.project.schoolmanagment.payload.response.businnes.LessonResponse;
 import com.project.schoolmanagment.payload.response.businnes.ResponseMessage;
 import com.project.schoolmanagment.service.business.LessonProgramService;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +81,14 @@ public class LessonProgramController {
     @PreAuthorize("hasAnyAuthority('Teacher')")
     @GetMapping("/getAllByTeacher")
     public Set<LessonProgramResponse> getAllLessonProgramsByTeacherUsername(HttpServletRequest httpServletRequest){
-        return lessonProgramService.getAllLessonProgramsByTeacherUsername(httpServletRequest);
+        return lessonProgramService.getAllLessonProgramsByUsername(httpServletRequest);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('Student')")
+    @GetMapping("/getAllLessonProgramByStudent")
+    public Set<LessonProgramResponse> getAllLessonProgramByStudent(HttpServletRequest httpServletRequest){
+        return lessonProgramService.getAllLessonProgramsByUsername(httpServletRequest);
     }
 
 
@@ -91,6 +97,12 @@ public class LessonProgramController {
     @GetMapping("/getAllByTeacher/{id}")
     public Set<LessonProgramResponse> getAllLessonProgramsByTeacherId(@PathVariable Long id){
         return lessonProgramService.getAllLessonProgramsByTeacherId(id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('Admin','Dean','ViceDean')")
+    @GetMapping("/getAllByStudent/{id}")
+    public Set<LessonProgramResponse> getAllLessonProgramsByStudentId(@PathVariable Long id){
+        return lessonProgramService.getAllLessonProgramsByStudentId(id);
     }
 
 
