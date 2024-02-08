@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.controller.user;
 
+import com.project.schoolmanagment.entity.concretes.user.User;
 import com.project.schoolmanagment.payload.messages.SuccessMessages;
 import com.project.schoolmanagment.payload.request.user.UserRequest;
 import com.project.schoolmanagment.payload.request.user.UserRequestWithoutPassword;
@@ -88,6 +89,12 @@ public class UserController {
   public ResponseEntity<String>deleteUserById(@PathVariable Long id,
       HttpServletRequest httpServletRequest){
     return ResponseEntity.ok(userService.deleteUserById(id,httpServletRequest));
+  }
+
+  @GetMapping("/getAll")
+  @PreAuthorize("hasAnyAuthority('Admin')")
+  public List<User> getAll(){
+    return userService.getAllUsers();
   }
 
 
