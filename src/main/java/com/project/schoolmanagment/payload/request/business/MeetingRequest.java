@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -38,5 +39,5 @@ public class MeetingRequest {
     private LocalTime stopTime;
 
     @NotNull(message = "Please select students")
-    private Long[] studentIds;
+    private List<Long> studentIds;
 }

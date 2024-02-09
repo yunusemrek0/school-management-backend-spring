@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * The MethodHelper class provides helper methods related to user operations.
  * It contains methods for user existence check, built-in check, and loading user data by username.
@@ -72,6 +74,11 @@ public class MethodHelper {
     if (!user.getUserRole().getRoleType().equals(roleType)){
       throw new ConflictException(ErrorMessages.NOT_HAVE_EXPECTED_ROLE_USER);
     }
+  }
+
+  public List<User> getUserList(List<Long> idList){
+
+    return userRepository.findByIdList(idList);
   }
 
 }

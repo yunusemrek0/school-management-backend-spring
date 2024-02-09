@@ -41,4 +41,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
   @Query("SELECT u FROM User u WHERE u.isAdvisor IS true ")
   List<User> findAllByAdvisorTeacher();
 
+@Query("SELECT u FROM User u WHERE u.id IN :idList")
+  List<User> findByIdList(List<Long> idList);
+
 }

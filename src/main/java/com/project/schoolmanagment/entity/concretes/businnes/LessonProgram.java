@@ -2,6 +2,7 @@ package com.project.schoolmanagment.entity.concretes.businnes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.project.schoolmanagment.entity.concretes.user.User;
@@ -66,8 +67,11 @@ public class LessonProgram {
   //TODO learn about all cascade ops. cases
   @ManyToOne(cascade = CascadeType.PERSIST)
   private EducationTerm educationTerm;
-  
-  @JsonProperty(access = Access.READ_ONLY)
+
+
+
+  //@JsonProperty(access = Access.READ_ONLY)
+  @JsonIgnore
   @ManyToMany(mappedBy = "lessonProgramList",fetch = FetchType.EAGER)
   private Set<User>users;
   
