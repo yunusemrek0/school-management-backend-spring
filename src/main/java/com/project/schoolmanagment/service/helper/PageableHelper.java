@@ -31,6 +31,10 @@ public class PageableHelper {
     }    
     return pageable;    
   }
+
+  public Pageable getPageableWithProperties(int page,int size){
+    return PageRequest.of(page,size,Sort.by("id").descending());
+  }
   
   
   

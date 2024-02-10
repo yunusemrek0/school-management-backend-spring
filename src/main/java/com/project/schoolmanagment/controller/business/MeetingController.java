@@ -5,6 +5,7 @@ import com.project.schoolmanagment.payload.response.businnes.MeetingResponse;
 import com.project.schoolmanagment.payload.response.businnes.ResponseMessage;
 import com.project.schoolmanagment.service.business.MeetingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -72,5 +73,26 @@ public class MeetingController {
     }
 
 
+
+    @PreAuthorize("hasAnyAuthority('Admin')")
+    @GetMapping("/getAllByPage")
+    public Page<MeetingResponse> getAllByPage(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+
+    ){
+        return meetingService.getAllByPage(page,size);
+    }
+
+    @PreAuthorize("hasAnyAuthority('Teacher')")
+    @GetMapping("/getAllByPageByTeacher")
+    public Page<MeetingResponse> getAllByPageByTeacher(
+            HttpServletRequest servletRequest,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+
+    ){
+        return meetingService.getAllByPageByTeacher(page,size,servletRequest);
+    }
 
 }
