@@ -15,10 +15,10 @@ public interface StudentInfoRepository extends JpaRepository<StudentInfo,Long> {
     @Query("SELECT (count (s) > 0) FROM StudentInfo s WHERE s.lesson.lessonName=?1 and s.student.id=?2")
     boolean giveMeDuplications(String lessonName,Long id);
 
-    /*
-    @Query("SELECT s FROM StudentInfo WHERE s.student.id=?1")
+
+    @Query("SELECT s FROM StudentInfo s WHERE s.student.id=?1")
     List<StudentInfo> findByStudentInfo(Long id);
 
-     */
+
 
 }

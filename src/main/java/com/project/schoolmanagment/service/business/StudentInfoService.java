@@ -128,7 +128,6 @@ public class StudentInfoService {
 
         studentInfoToUpdate.setStudent(studentInfo.getStudent());
         studentInfoToUpdate.setTeacher(studentInfo.getTeacher());
-        studentInfoToUpdate.setId(id);
 
         StudentInfo updatedStudentInfo = studentInfoRepository.save(studentInfoToUpdate);
 
@@ -182,8 +181,14 @@ public class StudentInfoService {
     public List<StudentInfoResponse> getByStudentId(Long id) {
         User student = methodHelper.isUserExist(id);
         methodHelper.checkRole(student,RoleType.STUDENT);
-
+/*
         return student.getStudentInfos()
+                .stream()
+                .map(studentInfoMapper::mapStudentInfoToStudentInfoResponse)
+                .collect(Collectors.toList());
+
+ */
+        return studentInfoRepository.findByStudentInfo(id)
                 .stream()
                 .map(studentInfoMapper::mapStudentInfoToStudentInfoResponse)
                 .collect(Collectors.toList());
